@@ -26,3 +26,5 @@ pnpm-debug.log*
 # playwright MCP screenshots / verification artifacts
 .playwright-mcp/
 brutal-verify.png
+verify-*.png
+v[0-9]-*.png

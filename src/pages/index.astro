@@ -12,7 +12,7 @@
 			href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@500;700&display=swap"
 			rel="stylesheet"
 		/>
-		<style>
+		<style is:global>
 			:root {
 				--paper: #f3ecdd;
 				--paper-2: #fbf6ec;
@@ -50,7 +50,17 @@
 				pointer-events: none;
 			}
 
-			.wrap { width: 100%; max-width: 700px; position: relative; z-index: 1; }
+			.wrap { width: 100%; max-width: 1200px; position: relative; z-index: 1; }
+			.layout {
+				display: grid;
+				grid-template-columns: minmax(0, 1fr) 360px;
+				gap: 28px;
+				align-items: start;
+			}
+			.main { min-width: 0; }
+			@media (max-width: 1024px) {
+				.layout { grid-template-columns: 1fr; }
+			}
 
 			header {
 				background: var(--accent);
@@ -155,7 +165,7 @@
 				border: var(--border);
 				box-shadow: var(--shadow-sm);
 				padding: 10px 15px;
-				cursor: default;
+				cursor: pointer;
 				transition: transform 0.08s, box-shadow 0.08s, background 0.08s;
 				animation: drop 0.22s cubic-bezier(0.3, 1.3, 0.5, 1) both;
 			}
@@ -195,40 +205,26 @@
 				color: #5c5443;
 			}
 
-			details {
-				margin-top: 28px;
+			.help-aside {
 				background: var(--paper-2);
 				border: var(--border);
 				box-shadow: var(--shadow);
+				position: sticky;
+				top: 20px;
 			}
-			summary {
-				cursor: pointer;
-				list-style: none;
-				padding: 18px 22px;
+			.help-aside h2 {
+				margin: 0;
+				padding: 16px 22px;
 				font-family: "Archivo Black";
 				font-size: 15px;
 				text-transform: uppercase;
 				letter-spacing: 0.01em;
-				display: flex;
-				align-items: center;
-				justify-content: space-between;
-				gap: 12px;
+				background: var(--ink);
+				color: var(--accent);
 			}
-			summary::-webkit-details-marker { display: none; }
-			summary .plus {
-				font-family: "JetBrains Mono", monospace;
-				font-weight: 700;
-				font-size: 20px;
-				width: 30px;
-				height: 30px;
-				display: grid;
-				place-items: center;
-				flex: none;
-				background: var(--accent);
-				border: var(--border);
+			@media (max-width: 900px) {
+				.help-aside { position: static; margin-top: 28px; }
 			}
-			details[open] summary { border-bottom: var(--border); }
-			details[open] summary .plus { background: var(--ink); color: var(--accent); }
 			.help-body { padding: 18px 22px 22px; }
 			.help-body > p {
 				font-family: "Space Grotesk";
@@ -237,42 +233,52 @@
 				line-height: 1.55;
 				margin: 2px 0 18px;
 			}
-			.table-scroll { overflow-x: auto; border: var(--border); }
+			.table-scroll { border: var(--border); }
 			table {
 				width: 100%;
 				border-collapse: collapse;
-				font-size: 13.5px;
-				min-width: 440px;
+				font-size: 13px;
 				background: var(--paper);
+				table-layout: fixed;
 			}
 			thead th {
 				text-align: left;
 				font-family: "JetBrains Mono", monospace;
 				font-weight: 700;
-				font-size: 11px;
-				letter-spacing: 0.1em;
+				font-size: 10.5px;
+				letter-spacing: 0.08em;
 				text-transform: uppercase;
 				background: var(--ink);
 				color: var(--accent);
-				padding: 11px 13px;
+				padding: 10px 11px;
 			}
 			tbody td {
-				padding: 11px 13px;
+				padding: 10px 11px;
 				border-bottom: 2px solid var(--ink);
 				vertical-align: top;
 				font-weight: 500;
+				word-break: break-word;
 			}
 			tbody tr:last-child td { border-bottom: 0; }
 			tbody tr:nth-child(even) { background: rgba(20, 17, 12, 0.04); }
-			tbody td:first-child { width: 30%; }
+			thead th:first-child, tbody td:first-child { width: 38%; }
 			tbody td:last-child { color: #5c5443; }
+			thead th:last-child, tbody td:last-child { display: none; }
+			@media (min-width: 1025px) {
+				thead th:first-child, tbody td:first-child { width: 32%; }
+				thead th:last-child, tbody td:last-child { display: table-cell; width: 30%; }
+			}
+			@media (max-width: 1024px) and (min-width: 640px) {
+				thead th:last-child, tbody td:last-child { display: table-cell; width: 32%; }
+				thead th:first-child, tbody td:first-child { width: 24%; }
+			}
 			code {
 				font-family: "JetBrains Mono", monospace;
 				font-weight: 700;
-				font-size: 12.5px;
+				font-size: 12px;
 				background: var(--accent);
 				color: var(--ink);
-				padding: 2px 6px;
+				padding: 2px 5px;
 				border: 2px solid var(--ink);
 				white-space: nowrap;
 			}
@@ -291,64 +297,65 @@
 				<h1>Sözlük Arama</h1>
 			</header>
 
-			<form id="searchForm" class="search" autocomplete="off">
-				<span class="search-label">Ara</span>
-				<input
-					id="query"
-					type="text"
-					placeholder="regex ile ara…  örn: ^kitap"
-					autofocus
-				/>
-			</form>
+			<div class="layout">
+				<div class="main">
+					<form id="searchForm" class="search" autocomplete="off">
+						<span class="search-label">Ara</span>
+						<input
+							id="query"
+							type="text"
+							placeholder="regex ile ara…  örn: ^kitap"
+							autofocus
+						/>
+					</form>
 
-			<p id="status" class="status">
-				<span class="tag" id="statusTag">·</span>
-				<span id="statusText">Yükleniyor…</span>
-			</p>
-
-			<ul id="results"></ul>
-			<div id="emptyState"></div>
-
-			<details>
-				<summary>
-					Regex bilmiyorum — kısa anlatım
-					<span class="plus">+</span>
-				</summary>
-				<div class="help-body">
-					<p>
-						Aramalar regex (düzenli ifade) ile çalışır. Çoğu zaman düz
-						kelime yazmak yeterli; içinde o harfler geçen kelimeleri
-						bulur.
+					<p id="status" class="status">
+						<span class="tag" id="statusTag">·</span>
+						<span id="statusText">Yükleniyor…</span>
 					</p>
-					<div class="table-scroll">
-						<table>
-							<thead>
-								<tr>
-									<th>Kalıp</th>
-									<th>Anlamı</th>
-									<th>Örnek eşleşme</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr><td><code>kitap</code></td><td>içinde "kitap" geçen</td><td>kitap, kitaplık, elkitabı</td></tr>
-								<tr><td><code>^kitap</code></td><td><code>^</code> = başlangıç</td><td>kitap, kitaplık</td></tr>
-								<tr><td><code>lık$</code></td><td><code>$</code> = bitiş</td><td>kitaplık, akıllılık</td></tr>
-								<tr><td><code>^kitap$</code></td><td>tam olarak "kitap"</td><td>kitap</td></tr>
-								<tr><td><code>k.t.p</code></td><td><code>.</code> = herhangi bir harf</td><td>kitap, kutup, kâtip</td></tr>
-								<tr><td><code>^k[ıi]t</code></td><td><code>[…]</code> = içindekilerden biri</td><td>kit, kıt ile başlayanlar</td></tr>
-								<tr><td><code>[aeıioöuü]</code></td><td>herhangi bir sesli</td><td>(çoğu kelime)</td></tr>
-								<tr><td><code>^.&#123;5&#125;$</code></td><td><code>&#123;n&#125;</code> = tam n harf</td><td>tam 5 harfli kelimeler</td></tr>
-								<tr><td><code>kitap|defter</code></td><td><code>|</code> = veya</td><td>kitap veya defter geçen</td></tr>
-								<tr><td><code>a+</code></td><td><code>+</code> = bir veya daha çok</td><td>a, aa, aaa…</td></tr>
-							</tbody>
-						</table>
-					</div>
-					<p class="fine">
-						Büyük/küçük harf farkı önemli değildir. En fazla 200 sonuç
-						gösterilir.
-					</p>
+
+					<ul id="results"></ul>
+					<div id="emptyState"></div>
 				</div>
-			</details>
+
+				<aside class="help-aside">
+					<h2>Regex arama örnekleri</h2>
+					<div class="help-body">
+						<p>
+							Aramalar regex (düzenli ifade) ile çalışır. Çoğu zaman düz
+							kelime yazmak yeterli; içinde o harfler geçen kelimeleri
+							bulur.
+						</p>
+						<div class="table-scroll">
+							<table>
+								<thead>
+									<tr>
+										<th>Kalıp</th>
+										<th>Anlamı</th>
+										<th>Örnek eşleşme</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr><td><code>kitap</code></td><td>içinde "kitap" geçen</td><td>kitap, kitaplık, elkitabı</td></tr>
+									<tr><td><code>^kitap</code></td><td><code>^</code> = başlangıç</td><td>kitap, kitaplık</td></tr>
+									<tr><td><code>lık$</code></td><td><code>$</code> = bitiş</td><td>kitaplık, akıllılık</td></tr>
+									<tr><td><code>^kitap$</code></td><td>tam olarak "kitap"</td><td>kitap</td></tr>
+									<tr><td><code>k.t.p</code></td><td><code>.</code> = herhangi bir harf</td><td>kitap, kutup, kâtip</td></tr>
+									<tr><td><code>^k[ıi]t</code></td><td><code>[…]</code> = içindekilerden biri</td><td>kit, kıt ile başlayanlar</td></tr>
+									<tr><td><code>[aeıioöuü]</code></td><td>herhangi bir sesli</td><td>(çoğu kelime)</td></tr>
+									<tr><td><code>^.&#123;5&#125;$</code></td><td><code>&#123;n&#125;</code> = tam n harf</td><td>tam 5 harfli kelimeler</td></tr>
+									<tr><td><code>kitap|defter</code></td><td><code>|</code> = veya</td><td>kitap veya defter geçen</td></tr>
+									<tr><td><code>a+</code></td><td><code>+</code> = bir veya daha çok</td><td>a, aa, aaa…</td></tr>
+								</tbody>
+							</table>
+						</div>
+						<p class="fine">
+							Büyük/küçük harf farkı önemli değildir. En fazla 200
+							sonuç gösterilir. Anlam görmek için kelimeye tıkla.
+						</p>
+					</div>
+				</aside>
+			</div>
 		</div>
 
 		<script>
@@ -362,6 +369,13 @@
 			const emptyEl = document.getElementById("emptyState") as HTMLDivElement;
 
 			let words: string[] = [];
+			let wordsNorm: string[] = [];
+
+			function deaccent(s: string): string {
+				return s.replace(/[âîûÂÎÛ]/g, (c) =>
+					({ â: "a", î: "i", û: "u", Â: "A", Î: "I", Û: "U" })[c] || c,
+				);
+			}
 
 			const fmt = (n: number) => n.toLocaleString("tr-TR");
 
@@ -382,20 +396,36 @@
 					.replace(/>/g, "&gt;");
 			}
 
-			function highlight(word: string, re: RegExp): string {
-				const safe = escapeHtml(word);
-				try {
-					return safe.replace(
-						new RegExp(re.source, "gi"),
-						(m) => `<mark>${m}</mark>`,
-					);
-				} catch {
-					return safe;
+			function highlight(word: string, norm: string, re: RegExp): string {
+				const globalRe = new RegExp(re.source, "gi");
+				const ranges: [number, number][] = [];
+				let m: RegExpExecArray | null;
+				while ((m = globalRe.exec(norm)) !== null) {
+					if (m[0].length === 0) {
+						globalRe.lastIndex++;
+						continue;
+					}
+					ranges.push([m.index, m.index + m[0].length]);
 				}
+				if (!ranges.length) return escapeHtml(word);
+				let html = "";
+				let cursor = 0;
+				for (const [s, e] of ranges) {
+					html +=
+						escapeHtml(word.slice(cursor, s)) +
+						`<mark>${escapeHtml(word.slice(s, e))}</mark>`;
+					cursor = e;
+				}
+				html += escapeHtml(word.slice(cursor));
+				return html;
 			}
 
 			function search() {
 				const q = queryEl.value.trim();
+				const url = new URL(window.location.href);
+				if (q) url.searchParams.set("q", q);
+				else url.searchParams.delete("q");
+				history.replaceState(null, "", url.toString());
 				resultsEl.innerHTML = "";
 				emptyEl.innerHTML = "";
 				emptyEl.className = "";
@@ -406,16 +436,16 @@
 
 				let re: RegExp;
 				try {
-					re = new RegExp(q, "i");
+					re = new RegExp(deaccent(q), "i");
 				} catch (err) {
 					setStatus("HATA", `geçersiz regex: ${(err as Error).message}`, true);
 					return;
 				}
 
-				const matches: string[] = [];
-				for (const w of words) {
-					if (re.test(w)) {
-						matches.push(w);
+				const matches: { word: string; norm: string }[] = [];
+				for (let i = 0; i < words.length; i++) {
+					if (re.test(wordsNorm[i])) {
+						matches.push({ word: words[i], norm: wordsNorm[i] });
 						if (matches.length >= MAX_RESULTS) break;
 					}
 				}
@@ -433,20 +463,38 @@
 				}
 
 				const frag = document.createDocumentFragment();
-				matches.forEach((w, i) => {
+				matches.forEach((m, i) => {
 					const li = document.createElement("li");
 					li.style.animationDelay = Math.min(i * 10, 300) + "ms";
-					li.innerHTML = highlight(w, re);
+					li.dataset.word = m.word;
+					li.innerHTML = highlight(m.word, m.norm, re);
 					frag.appendChild(li);
 				});
 				resultsEl.appendChild(frag);
 			}
 
+			resultsEl.addEventListener("click", (e) => {
+				const target = e.target as HTMLElement;
+				const li = target.closest("li") as HTMLLIElement | null;
+				if (!li || !li.dataset.word) return;
+				const params = new URLSearchParams({ w: li.dataset.word });
+				const back = queryEl.value.trim();
+				if (back) params.set("back", back);
+				window.location.href = `/kelime/?${params.toString()}`;
+			});
+
 			async function loadWords() {
 				const res = await fetch("/autocomplete.json");
 				const data: { madde: string }[] = await res.json();
 				words = data.map((e) => e.madde);
-				loaded();
+				wordsNorm = words.map(deaccent);
+				const initial = new URLSearchParams(window.location.search).get("q");
+				if (initial) {
+					queryEl.value = initial;
+					search();
+				} else {
+					loaded();
+				}
 			}
 
 			queryEl.addEventListener("input", search);

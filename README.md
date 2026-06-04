@@ -1,43 +1,47 @@
-# Astro Starter Kit: Minimal
+# Sözlük — Regex ile Türkçe kelime arama
+
+> Türkçe sözlüğünde **regex** ile kelime arayan, statik tek-sayfalık bir web sitesi. Kelimeye tıklayınca TDK'nın anlamını canlı olarak getirir.
+
+**🌐 Canlı:** <https://sozluk-20s.pages.dev>
+
+## Ne yapar?
+
+- Arama kutusuna **regex** yazarsın (`^kit`, `lık$`, `k.t.p`, `^.{5}$` gibi).
+- 65.084 Türkçe kelimeden anlık eşleşenleri listeler.
+- Sonuç kelimeye tıklarsın → ayrı sayfada açıklaması, kökeni, kelime grubu, örnek cümleler ve birleşik kelimeler gelir.
+- **Şapkalı harf umurunda değil:** "kabus" yazınca "kâbus"u da bulur.
+- Tarayıcı geri tuşu + sayfanın "Aramaya dön" butonu aramanı korur.
+
+## Veri kaynağı
+
+- Kelime listesi: [`sozluk.gov.tr/autocomplete.json`](https://sozluk.gov.tr/autocomplete.json) — boşluklu maddeler filtrelendi, kalan 65.084 tek kelime `public/autocomplete.json`'da gömülü.
+- Anlamlar: `https://sozluk.gov.tr/gts?ara=<kelime>` — kullanıcı sayfaya gelince **client-side** çağrılır (backend yok).
+
+## Geliştirme
 
 ```sh
-npm create astro@latest -- --template minimal
+npm install
+npm run dev      # http://localhost:4321
+npm run build    # dist/ klasörüne statik çıktı
+npm run preview  # build'i lokal olarak servis et
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## Proje yapısı
 
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+```
+public/
+  autocomplete.json   # 65.084 kelime
+src/pages/
+  index.astro         # arama sayfası + regex tutorial sidebar
+  kelime.astro        # /kelime/?w=<kelime> → tek kelime detay sayfası
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## Teknoloji
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+- [Astro](https://astro.build) — statik site
+- Sıfır framework, sıfır build-time DB. Tüm arama tarayıcıda çalışır.
+- Tasarım: **Neo-Brutalism** (krem kâğıt zemin, sert siyah kenarlar, elektrik sarısı aksan).
 
-Any static assets, like images, can be placed in the `public/` directory.
+## Lisans
 
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+MIT.

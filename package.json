@@ -1,7 +1,9 @@
 {
-  "name": "intergalactic-iron",
+  "name": "sozluk",
   "type": "module",
-  "version": "0.0.1",
+  "version": "0.1.0",
+  "homepage": "https://sozluk-20s.pages.dev",
+  "repository": "https://github.com/msoneri/sozluk",
   "engines": {
     "node": ">=22.12.0"
   },

@@ -1,0 +1,302 @@
+---
+---
+
+<html lang="tr">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Kelime — Sözlük</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@500;700&display=swap"
+			rel="stylesheet"
+		/>
+		<style is:global>
+			:root {
+				--paper: #f3ecdd;
+				--paper-2: #fbf6ec;
+				--ink: #14110c;
+				--accent: #ffd400;
+				--accent-2: #ff5c36;
+				--border: 3px solid var(--ink);
+				--shadow: 6px 6px 0 var(--ink);
+				--shadow-sm: 4px 4px 0 var(--ink);
+			}
+			* { box-sizing: border-box; }
+			html, body { margin: 0; }
+			body {
+				font-family: "Space Grotesk", system-ui, sans-serif;
+				color: var(--ink);
+				background: var(--paper);
+				background-image:
+					linear-gradient(var(--ink) 1px, transparent 1px),
+					linear-gradient(90deg, var(--ink) 1px, transparent 1px);
+				background-size: 32px 32px;
+				background-position: -1px -1px;
+				min-height: 100vh;
+				padding: clamp(18px, 4vw, 56px) 18px 90px;
+				display: flex;
+				justify-content: center;
+				position: relative;
+			}
+			body::before {
+				content: "";
+				position: fixed;
+				inset: 0;
+				background: var(--paper);
+				opacity: 0.86;
+				z-index: 0;
+				pointer-events: none;
+			}
+			.wrap { width: 100%; max-width: 760px; position: relative; z-index: 1; }
+
+			.back {
+				display: inline-flex;
+				align-items: center;
+				gap: 8px;
+				font-family: "JetBrains Mono", monospace;
+				font-weight: 700;
+				font-size: 12px;
+				letter-spacing: 0.14em;
+				text-transform: uppercase;
+				background: var(--ink);
+				color: var(--paper-2);
+				padding: 8px 12px;
+				border: var(--border);
+				box-shadow: var(--shadow-sm);
+				text-decoration: none;
+				margin-bottom: 22px;
+				transition: transform 0.08s, box-shadow 0.08s;
+			}
+			.back:hover {
+				transform: translate(-2px, -2px);
+				box-shadow: 6px 6px 0 var(--ink);
+				background: var(--accent);
+				color: var(--ink);
+			}
+
+			.card {
+				background: var(--paper-2);
+				border: var(--border);
+				box-shadow: var(--shadow);
+				padding: 28px 30px;
+			}
+			.head {
+				display: flex;
+				align-items: baseline;
+				gap: 16px;
+				flex-wrap: wrap;
+				border-bottom: var(--border);
+				padding-bottom: 18px;
+				margin-bottom: 20px;
+			}
+			.word {
+				font-family: "Archivo Black";
+				font-size: clamp(36px, 7vw, 56px);
+				line-height: 1;
+				margin: 0;
+				text-transform: lowercase;
+				letter-spacing: -0.01em;
+			}
+			.origin {
+				font-family: "JetBrains Mono", monospace;
+				font-size: 13px;
+				color: var(--ink);
+				background: var(--accent);
+				padding: 4px 9px;
+				font-weight: 700;
+			}
+
+			ol {
+				margin: 0;
+				padding: 0 0 0 28px;
+				display: flex;
+				flex-direction: column;
+				gap: 18px;
+			}
+			ol li { font-size: 17px; line-height: 1.55; }
+			.pos {
+				display: inline-block;
+				font-family: "JetBrains Mono", monospace;
+				font-weight: 700;
+				font-size: 11px;
+				letter-spacing: 0.06em;
+				text-transform: uppercase;
+				background: var(--ink);
+				color: var(--accent);
+				padding: 2px 8px;
+				margin-right: 10px;
+				vertical-align: 2px;
+			}
+			.ex {
+				display: block;
+				margin-top: 8px;
+				font-style: italic;
+				color: #5c5443;
+				font-size: 14.5px;
+				border-left: 3px solid var(--ink);
+				padding: 4px 0 4px 12px;
+			}
+			.ex .author { font-style: normal; font-weight: 700; color: var(--ink); }
+
+			.loading {
+				font-family: "JetBrains Mono", monospace;
+				font-size: 14px;
+				color: #5c5443;
+			}
+			.error {
+				font-family: "JetBrains Mono", monospace;
+				font-size: 14px;
+				color: var(--ink);
+				background: var(--accent-2);
+				padding: 10px 14px;
+				display: inline-block;
+				border: var(--border);
+				box-shadow: var(--shadow-sm);
+			}
+
+			.compounds {
+				margin-top: 24px;
+				padding-top: 20px;
+				border-top: var(--border);
+			}
+			.compounds h3 {
+				margin: 0 0 12px;
+				font-family: "JetBrains Mono", monospace;
+				font-weight: 700;
+				font-size: 11px;
+				letter-spacing: 0.14em;
+				text-transform: uppercase;
+				color: #5c5443;
+			}
+			.compounds .list {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 8px;
+			}
+			.compounds a {
+				font-family: "Space Grotesk", sans-serif;
+				font-weight: 600;
+				font-size: 14px;
+				background: var(--paper);
+				border: 2px solid var(--ink);
+				box-shadow: 3px 3px 0 var(--ink);
+				padding: 6px 10px;
+				color: var(--ink);
+				text-decoration: none;
+				transition: transform 0.08s, background 0.08s;
+			}
+			.compounds a:hover {
+				background: var(--accent);
+				transform: translate(-1px, -1px);
+			}
+		</style>
+	</head>
+	<body>
+		<div class="wrap">
+			<a id="backLink" class="back" href="/">← Aramaya dön</a>
+			<div id="card" class="card">
+				<div class="loading">Yükleniyor…</div>
+			</div>
+		</div>
+
+		<script>
+			type GtsMeaning = {
+				anlam?: string;
+				ozelliklerListe?: { tam_adi?: string }[];
+				orneklerListe?: { ornek?: string; yazar?: { tam_adi?: string }[] }[];
+			};
+			type GtsEntry = {
+				madde?: string;
+				lisan?: string;
+				birlesikler?: string;
+				anlamlarListe?: GtsMeaning[];
+			};
+
+			const cardEl = document.getElementById("card") as HTMLDivElement;
+
+			function escapeHtml(s: string): string {
+				return s
+					.replace(/&/g, "&amp;")
+					.replace(/</g, "&lt;")
+					.replace(/>/g, "&gt;");
+			}
+
+			function render(word: string, data: GtsEntry[] | "error"): string {
+				if (data === "error" || !Array.isArray(data) || data.length === 0) {
+					return `<div class="error">"${escapeHtml(word)}" için anlam bulunamadı.</div>`;
+				}
+				const entry = data[0];
+				const origin = entry.lisan
+					? `<span class="origin">${escapeHtml(entry.lisan)}</span>`
+					: "";
+				const head = `<div class="head"><h1 class="word">${escapeHtml(entry.madde || word)}</h1>${origin}</div>`;
+				const items = (entry.anlamlarListe || [])
+					.map((m) => {
+						const pos = m.ozelliklerListe?.[0]?.tam_adi
+							? `<span class="pos">${escapeHtml(m.ozelliklerListe[0].tam_adi!)}</span>`
+							: "";
+						const ex = m.orneklerListe?.[0]?.ornek
+							? `<span class="ex">${escapeHtml(m.orneklerListe[0].ornek)}${
+									m.orneklerListe[0].yazar?.[0]?.tam_adi
+										? ` <span class="author">— ${escapeHtml(m.orneklerListe[0].yazar[0].tam_adi!)}</span>`
+										: ""
+								}</span>`
+							: "";
+						return `<li>${pos}${escapeHtml(m.anlam || "")}${ex}</li>`;
+					})
+					.join("");
+				const meanings = items ? `<ol>${items}</ol>` : "";
+
+				let compounds = "";
+				if (entry.birlesikler) {
+					const list = entry.birlesikler
+						.split(",")
+						.map((w) => w.trim())
+						.filter(Boolean)
+						.slice(0, 60);
+					if (list.length) {
+						compounds = `<div class="compounds"><h3>Birleşik kelimeler</h3><div class="list">${list
+							.map(
+								(w) =>
+									`<a href="/kelime/?w=${encodeURIComponent(w)}">${escapeHtml(w)}</a>`,
+							)
+							.join("")}</div></div>`;
+					}
+				}
+
+				return head + meanings + compounds;
+			}
+
+			async function load() {
+				const params = new URLSearchParams(window.location.search);
+				const word = params.get("w")?.trim();
+				const back = params.get("back");
+				if (back) {
+					const backLink = document.getElementById("backLink") as HTMLAnchorElement;
+					backLink.href = `/?q=${encodeURIComponent(back)}`;
+				}
+				if (!word) {
+					cardEl.innerHTML = `<div class="error">Kelime belirtilmedi.</div>`;
+					return;
+				}
+				document.title = `${word} — Sözlük`;
+				try {
+					const r = await fetch(
+						`https://sozluk.gov.tr/gts?ara=${encodeURIComponent(word)}`,
+					);
+					const data = await r.json();
+					cardEl.innerHTML = render(
+						word,
+						Array.isArray(data) ? (data as GtsEntry[]) : "error",
+					);
+				} catch {
+					cardEl.innerHTML = render(word, "error");
+				}
+			}
+
+			load();
+		</script>
+	</body>
+</html>
