@@ -18,7 +18,6 @@ Türkçe sözlüğünde **regex** ile kelime arayan statik tek sayfalık bir web
 - [ ] **Derleme Sözlüğü** (halk ağzı / yöresel) — `sozluk.gov.tr/derleme?ara=`
 - [ ] Atasözleri ve deyimler sözlüğü
 - [ ] Etimoloji sayfasının zengin gösterimi
-- [ ] TDK'nın ses dosyaları ile telaffuz
 
 ## Veri kaynağı
 
@@ -46,8 +45,8 @@ src/pages/
 
 ## Teknoloji
 
-- [Astro](https://astro.build) — statik site, framework yok, build-time DB yok. Arama tamamen tarayıcıda.
-- Tasarım: Neo-Brutalism (krem zemin, kalın siyah kenarlar, elektrik sarısı vurgular).
+- [Astro](https://astro.build)
+- Tasarım: Neo-Brutalism
 
 ## Lisans
 
